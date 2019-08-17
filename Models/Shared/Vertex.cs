@@ -1,6 +1,6 @@
 // using System.Collections.Generic;
 
-namespace GraphDataStructure.Models
+namespace GraphDataStructure.Models.Shared
 {
     public class Vertex
     {

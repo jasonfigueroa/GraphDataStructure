@@ -1,10 +1,11 @@
 using Microsoft.EntityFrameworkCore;
+using GraphDataStructure.Models.Shared;
 
-namespace GraphDataStructure.Models
+namespace GraphDataStructure.Models.DbContexts
 {
-    public class GraphDSContext : DbContext
+    public class StageDbContext : DbContext
     {
-        public GraphDSContext(DbContextOptions<GraphDSContext> options)
+        public StageDbContext(DbContextOptions<StageDbContext> options)
             : base(options)
         {
         }

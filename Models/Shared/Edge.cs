@@ -1,4 +1,4 @@
-namespace GraphDataStructure.Models
+namespace GraphDataStructure.Models.Shared
 {
     public class Edge
     {

@@ -11,7 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.EntityFrameworkCore;
-using GraphDataStructure.Models;
+using GraphDataStructure.Models.DbContexts;
 
 namespace GraphDataStructure
 {
@@ -27,7 +27,9 @@ namespace GraphDataStructure
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<GraphDSContext>(options => options.UseSqlite("Data Source=data.db"));
+            services.AddDbContext<MappedGraphsDbContext>(options => options.UseSqlite("Data Source=MappedGraphs.db"));
+            services.AddDbContext<DevDbContext>(options => options.UseSqlite("Data Source=Dev.db"));
+            services.AddDbContext<StageDbContext>(options => options.UseSqlite("Data Source=Stage.db"));
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 

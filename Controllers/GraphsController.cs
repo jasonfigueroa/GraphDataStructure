@@ -3,7 +3,8 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using GraphDataStructure.Models;
+using GraphDataStructure.Models.Shared;
+using GraphDataStructure.Models.DbContexts;
 
 namespace GraphDataStructure.Controllers
 {
@@ -11,41 +12,76 @@ namespace GraphDataStructure.Controllers
     [ApiController]
     public class GraphsController : ControllerBase
     {
-        private readonly GraphDSContext _context;
+        private readonly DevDbContext _devDbContext;
+        private readonly StageDbContext _stageDbContext;
+        private readonly MappedGraphsDbContext _mappedGraphsDbContext;
 
-        public GraphsController(GraphDSContext context)
+        public GraphsController(DevDbContext devDbContext, StageDbContext stageDbContext, MappedGraphsDbContext mappedGraphsDbContext)
         {
-            _context = context;
+            _mappedGraphsDbContext = mappedGraphsDbContext;
+            _stageDbContext = stageDbContext;
+            _devDbContext = devDbContext;
 
-            if (_context.Vertices.Count() == 0)
+            // seeding dev db
+            if (_devDbContext.Vertices.Count() == 0)
             {
-                _context.Vertices.Add(new Vertex { Name = "A" });
-                _context.Vertices.Add(new Vertex { Name = "B" });
-                _context.Vertices.Add(new Vertex { Name = "C" });
-                _context.Vertices.Add(new Vertex { Name = "D" });
-                _context.Vertices.Add(new Vertex { Name = "E" });
-                _context.Vertices.Add(new Vertex { Name = "F" });
-                _context.SaveChanges();
+                _devDbContext.Vertices.Add(new Vertex { Name = "A" });
+                _devDbContext.Vertices.Add(new Vertex { Name = "B" });
+                _devDbContext.Vertices.Add(new Vertex { Name = "C" });
+                _devDbContext.Vertices.Add(new Vertex { Name = "D" });
+                _devDbContext.Vertices.Add(new Vertex { Name = "E" });
+                _devDbContext.Vertices.Add(new Vertex { Name = "F" });
+                _devDbContext.SaveChanges();
             }
 
-            if (_context.Edges.Count() == 0)
+            if (_devDbContext.Edges.Count() == 0)
             {
-                var vertexA = _context.Vertices.FirstOrDefault(vertex => vertex.Name == "A");
-                var vertexB = _context.Vertices.FirstOrDefault(vertex => vertex.Name == "B");
-                var vertexC = _context.Vertices.FirstOrDefault(vertex => vertex.Name == "C");
-                var vertexD = _context.Vertices.FirstOrDefault(vertex => vertex.Name == "D");
-                var vertexE = _context.Vertices.FirstOrDefault(vertex => vertex.Name == "E");
-                var vertexF = _context.Vertices.FirstOrDefault(vertex => vertex.Name == "F");
-                // Create a new TodoItem if collection is empty,
-                // which means you can't delete all TodoItems.
-                _context.Edges.Add(new Edge { VertexA = vertexA, VertexB = vertexB });
-                _context.Edges.Add(new Edge { VertexA = vertexA, VertexB = vertexD });
-                _context.Edges.Add(new Edge { VertexA = vertexB, VertexB = vertexF });
-                _context.Edges.Add(new Edge { VertexA = vertexC, VertexB = vertexF });
-                _context.Edges.Add(new Edge { VertexA = vertexC, VertexB = vertexE });
-                _context.Edges.Add(new Edge { VertexA = vertexF, VertexB = vertexE });
+                var vertexA = _devDbContext.Vertices.FirstOrDefault(vertex => vertex.Name == "A");
+                var vertexB = _devDbContext.Vertices.FirstOrDefault(vertex => vertex.Name == "B");
+                var vertexC = _devDbContext.Vertices.FirstOrDefault(vertex => vertex.Name == "C");
+                var vertexD = _devDbContext.Vertices.FirstOrDefault(vertex => vertex.Name == "D");
+                var vertexE = _devDbContext.Vertices.FirstOrDefault(vertex => vertex.Name == "E");
+                var vertexF = _devDbContext.Vertices.FirstOrDefault(vertex => vertex.Name == "F");
+
+                _devDbContext.Edges.Add(new Edge { VertexA = vertexA, VertexB = vertexB });
+                _devDbContext.Edges.Add(new Edge { VertexA = vertexA, VertexB = vertexD });
+                _devDbContext.Edges.Add(new Edge { VertexA = vertexB, VertexB = vertexF });
+                _devDbContext.Edges.Add(new Edge { VertexA = vertexC, VertexB = vertexF });
+                _devDbContext.Edges.Add(new Edge { VertexA = vertexC, VertexB = vertexE });
+                _devDbContext.Edges.Add(new Edge { VertexA = vertexF, VertexB = vertexE });
                 
-                _context.SaveChanges();
+                _devDbContext.SaveChanges();
+            }
+
+            // seeding stage db
+            if (_stageDbContext.Vertices.Count() == 0)
+            {
+                _stageDbContext.Vertices.Add(new Vertex { Name = "A" });
+                _stageDbContext.Vertices.Add(new Vertex { Name = "B" });
+                _stageDbContext.Vertices.Add(new Vertex { Name = "C" });
+                _stageDbContext.Vertices.Add(new Vertex { Name = "D" });
+                _stageDbContext.Vertices.Add(new Vertex { Name = "E" });
+                _stageDbContext.Vertices.Add(new Vertex { Name = "F" });
+                _stageDbContext.SaveChanges();
+            }
+
+            if (_stageDbContext.Edges.Count() == 0)
+            {
+                var vertexA = _stageDbContext.Vertices.FirstOrDefault(vertex => vertex.Name == "A");
+                var vertexB = _stageDbContext.Vertices.FirstOrDefault(vertex => vertex.Name == "B");
+                // var vertexC = _stageDbContext.Vertices.FirstOrDefault(vertex => vertex.Name == "C");
+                var vertexD = _stageDbContext.Vertices.FirstOrDefault(vertex => vertex.Name == "D");
+                var vertexE = _stageDbContext.Vertices.FirstOrDefault(vertex => vertex.Name == "E");
+                var vertexF = _stageDbContext.Vertices.FirstOrDefault(vertex => vertex.Name == "F");
+
+                _stageDbContext.Edges.Add(new Edge { VertexA = vertexA, VertexB = vertexB });
+                _stageDbContext.Edges.Add(new Edge { VertexA = vertexA, VertexB = vertexD });
+                _stageDbContext.Edges.Add(new Edge { VertexA = vertexB, VertexB = vertexF });
+                // _stageDbContext.Edges.Add(new Edge { VertexA = vertexC, VertexB = vertexF });
+                // _stageDbContext.Edges.Add(new Edge { VertexA = vertexC, VertexB = vertexE });
+                _stageDbContext.Edges.Add(new Edge { VertexA = vertexF, VertexB = vertexE });
+                
+                _stageDbContext.SaveChanges();
             }
         }
 
