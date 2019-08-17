@@ -3,3 +3,4 @@ obj/
 *.db
 *.sqlite3
 .vscode
+Migrations/
